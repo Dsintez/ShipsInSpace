@@ -7,20 +7,22 @@ import ru.d.sintez.base.BaseScreen;
 
 public class MenuScreen extends BaseScreen {
 
-    private float multi;
     private Texture background;
     private Texture star;
     private Vector2 posStar;
     private Vector2 touch;
     private Vector2 direction;
+    private Vector2 directionNor;
+
+    private Vector2 acceleration;
+    private float length;
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touch.set(screenX, Gdx.graphics.getHeight() - screenY);
-        direction = posStar.cpy();  //direction.set(posStar.x, posStar.y);
-        direction.sub(touch.x, touch.y);
-        direction.nor();
-        direction.scl(multi, multi);
+        direction = direction.set(touch).sub(posStar);
+        length = direction.len();
+        directionNor = direction.cpy().nor().scl(acceleration);
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
@@ -32,14 +34,18 @@ public class MenuScreen extends BaseScreen {
         posStar = new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         touch = new Vector2();
         direction = new Vector2();
-        multi = 4;
+        directionNor = new Vector2();
+        acceleration = new Vector2(2.0f,2.0f);
+        length = 0.0f;
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        if (!(posStar.x > touch.x - multi && posStar.x < touch.x + multi && posStar.y > touch.y - multi && posStar.y < touch.y + multi)) {
-            posStar.sub(direction);
+        length -= directionNor.len();
+        if (length >= 0) {
+            direction.add(directionNor);
+            posStar.add(directionNor);
         }
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
