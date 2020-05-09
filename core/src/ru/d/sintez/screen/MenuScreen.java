@@ -14,7 +14,7 @@ public class MenuScreen extends BaseScreen {
     private Vector2 direction;
     private Vector2 directionNor;
 
-    private Vector2 acceleration;
+    private Vector2 speedup;
     private float length;
 
     @Override
@@ -22,7 +22,7 @@ public class MenuScreen extends BaseScreen {
         touch.set(screenX, Gdx.graphics.getHeight() - screenY);
         direction = direction.set(touch).sub(posStar);
         length = direction.len();
-        directionNor = direction.cpy().nor().scl(acceleration);
+        directionNor = direction.cpy().nor().scl(speedup);
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
@@ -35,15 +35,15 @@ public class MenuScreen extends BaseScreen {
         touch = new Vector2();
         direction = new Vector2();
         directionNor = new Vector2();
-        acceleration = new Vector2(2.0f,2.0f);
+        speedup = new Vector2(4.0f,4.0f);
         length = 0.0f;
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        length -= directionNor.len();
         if (length >= 0) {
+            length -= directionNor.len();
             direction.add(directionNor);
             posStar.add(directionNor);
         }
