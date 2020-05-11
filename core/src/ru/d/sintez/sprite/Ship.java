@@ -8,17 +8,22 @@ import ru.d.sintez.math.Rect;
 
 public class Ship extends Sprite {
 
-    private Object lock = new Object();
     private float length;
     private Vector2 direction;
     private Vector2 directionNor;
     private Vector2 speedup;
+    private Vector2 touch;
 
-    public Ship(Texture region) {
-        super(new TextureRegion(region));
+    public Ship(Texture... region) {
+        super(new TextureRegion(region[0]));
+        regions = new TextureRegion[region.length];
+        for (int i = 0; i < region.length; i++) {
+            regions[i] = new TextureRegion(region[i]);
+        }
         direction = new Vector2();
         directionNor = new Vector2();
-        speedup = new Vector2(0.01f, 0.01f);
+        touch = new Vector2();
+        speedup = new Vector2(0.005f, 0.005f);
         length = 0.0f;
     }
 
@@ -30,13 +35,17 @@ public class Ship extends Sprite {
 
     @Override
     public void update(float delta) {
-        synchronized (lock) {
-            if (length >= 0) {
-                super.update(delta);
-                length -= directionNor.len();
-                direction.add(directionNor);
-                pos.add(directionNor);
-            }
+        if (regions.length > 1) {
+            if (frame == regions.length - 1) frame = 0;
+            else frame++;
+        }
+        if (length >= 0) {
+            super.update(delta);
+            length -= directionNor.len();
+            direction.add(directionNor);
+            pos.add(directionNor);
+        } else {
+            pos.set(touch);
         }
     }
 
@@ -47,12 +56,11 @@ public class Ship extends Sprite {
     }
 
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        synchronized (lock) {
-            direction = direction.set(touch).sub(pos);
-            length = direction.len();
-            directionNor = direction.cpy().nor().scl(speedup);
-            System.out.printf("direction x = %s, y = %s%n", direction.x, direction.y);
-        }
+        this.touch.set(touch);
+        direction = direction.set(touch).sub(pos);
+        length = direction.len();
+        directionNor = direction.cpy().nor().scl(speedup);
+        System.out.printf("direction x = %s, y = %s%n", direction.x, direction.y);
         return false;
     }
 }
