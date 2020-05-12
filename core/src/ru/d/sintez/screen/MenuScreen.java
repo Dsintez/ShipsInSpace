@@ -5,27 +5,35 @@ import com.badlogic.gdx.math.Vector2;
 import ru.d.sintez.base.BaseScreen;
 import ru.d.sintez.math.Rect;
 import ru.d.sintez.sprite.Background;
+import ru.d.sintez.sprite.GameButton;
+import ru.d.sintez.sprite.Ship;
 
 public class MenuScreen extends BaseScreen {
 
     private Background background;
+    private Ship ship;
     private Texture backgroundImg;
-    private Texture star;
-    private Vector2 posStar;
-    private Vector2 touch;
-    private Vector2 direction;
-    private Vector2 directionNor;
-
-    private Vector2 speedup;
-    private float length;
+    private Texture star1;
+    private Texture star2;
+    private Texture buttonImg;
+    private GameButton buttonExit;
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-//        touch.set(screenX, Gdx.graphics.getHeight() - screenY);
-//        direction = direction.set(touch).sub(posStar);
-//        length = direction.len();
-//        directionNor = direction.cpy().nor().scl(speedup);
         return super.touchDown(screenX, screenY, pointer, button);
+    }
+
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer, int button) {
+        ship.touchDown(touch, pointer, button);
+        buttonExit.touchDown(touch, pointer, button);
+        return super.touchDown(touch, pointer, button);
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer, int button) {
+        buttonExit.touchUp(touch, pointer, button);
+        return super.touchUp(touch, pointer, button);
     }
 
     @Override
@@ -33,39 +41,39 @@ public class MenuScreen extends BaseScreen {
         super.show();
         backgroundImg = new Texture("galaxyNebula.jpg");
         background = new Background(backgroundImg);
-//        star = new Texture("Star.png");
-//        posStar = new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-//        touch = new Vector2();
-//        direction = new Vector2();
-//        directionNor = new Vector2();
-//        speedup = new Vector2(4.0f,4.0f);
-//        length = 0.0f;
+
+        star1 = new Texture("Star\\Star1.png");
+        star2 = new Texture("Star\\Star2.png");
+        ship = new Ship(star1, star1, star1, star1, star1, star2, star2, star2, star2, star2);
+
+        buttonImg = new Texture("Exit.png");
+        buttonExit = new GameButton(buttonImg);
     }
 
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
+        buttonExit.resize(worldBounds);
+        ship.resize(worldBounds);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-//        if (length >= 0) {
-//            length -= directionNor.len();
-//            direction.add(directionNor);
-//            posStar.add(directionNor);
-//        }
+        ship.update(delta);
         batch.begin();
-        float aspect = backgroundImg.getWidth() / (float) backgroundImg.getHeight();
         background.draw(batch);
-//        batch.draw(star, -1f, -1f, 0.1f, 0.1f);
+        buttonExit.draw(batch);
+        ship.draw(batch);
         batch.end();
     }
 
     @Override
     public void dispose() {
         backgroundImg.dispose();
-        star.dispose();
+        star1.dispose();
+        star2.dispose();
+        backgroundImg.dispose();
         super.dispose();
     }
 }
