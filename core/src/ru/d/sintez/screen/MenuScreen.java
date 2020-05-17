@@ -1,6 +1,8 @@
 package ru.d.sintez.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import ru.d.sintez.base.BaseScreen;
 import ru.d.sintez.math.Rect;
@@ -13,9 +15,8 @@ public class MenuScreen extends BaseScreen {
     private Background background;
     private Ship ship;
     private Texture backgroundImg;
-    private Texture star1;
-    private Texture star2;
     private Texture buttonImg;
+    private TextureAtlas atlas;
     private GameButton buttonExit;
 
     @Override
@@ -39,12 +40,11 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        backgroundImg = new Texture("galaxyNebula.jpg");
+        backgroundImg = new Texture("Galaxy.jpg");
         background = new Background(backgroundImg);
 
-        star1 = new Texture("Star\\Star1.png");
-        star2 = new Texture("Star\\Star2.png");
-        ship = new Ship(star1, star1, star1, star1, star1, star2, star2, star2, star2, star2);
+        atlas = new TextureAtlas(Gdx.files.internal("Atlas/Atlas.pack"));
+        ship = new Ship(atlas, 3);
 
         buttonImg = new Texture("Exit.png");
         buttonExit = new GameButton(buttonImg);
@@ -71,8 +71,7 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void dispose() {
         backgroundImg.dispose();
-        star1.dispose();
-        star2.dispose();
+        atlas.dispose();
         backgroundImg.dispose();
         super.dispose();
     }

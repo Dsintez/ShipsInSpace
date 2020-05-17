@@ -1,6 +1,7 @@
 package ru.d.sintez.sprite;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import ru.d.sintez.base.Sprite;
@@ -8,17 +9,20 @@ import ru.d.sintez.math.Rect;
 
 public class Ship extends Sprite {
 
+    private final byte PROTRACTION = 20;
+
     private float length;
     private Vector2 direction;
     private Vector2 directionNor;
     private Vector2 speedup;
     private Vector2 touch;
+    byte timer;
 
-    public Ship(Texture... region) {
-        super(new TextureRegion(region[0]));
-        regions = new TextureRegion[region.length];
-        for (int i = 0; i < region.length; i++) {
-            regions[i] = new TextureRegion(region[i]);
+    public Ship(TextureAtlas atlas, int countPNG) {
+        super(new TextureRegion());
+        regions = new TextureRegion[countPNG];
+        for (int i = 0; i < regions.length; i++) {
+            regions[i] = atlas.findRegion("Ship", i);
         }
         direction = new Vector2();
         directionNor = new Vector2();
@@ -29,15 +33,19 @@ public class Ship extends Sprite {
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.04f);
+        setHeightProportion(0.1f);
         this.pos.set(worldBounds.pos);
     }
 
     @Override
     public void update(float delta) {
         if (regions.length > 1) {
-            if (frame == regions.length - 1) frame = 0;
-            else frame++;
+            if (timer % PROTRACTION == 0) {
+                if (frame == regions.length - 1) frame = 0;
+                else frame++;
+                timer = 0;
+            }
+            timer++;
         }
         if (length >= 0) {
             super.update(delta);
