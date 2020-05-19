@@ -2,6 +2,7 @@ package ru.d.sintez.base;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import ru.d.sintez.math.Rect;
 
 public class Sprite extends Rect {
@@ -40,6 +41,14 @@ public class Sprite extends Rect {
     public void resize(Rect worldBounds) {
     }
 
+    public boolean touchDown(Vector2 touch, int pointer, int button) {
+        return false;
+    }
+
+    public boolean touchUp(Vector2 touch, int pointer, int button) {
+        return false;
+    }
+
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         return false;
     }
@@ -48,4 +57,11 @@ public class Sprite extends Rect {
         return false;
     }
 
+    public float getScale() {
+        return scale;
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
+    }
 }

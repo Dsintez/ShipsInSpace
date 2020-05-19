@@ -1,0 +1,12 @@
+
+Stars.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+star
+  rotate: false
+  xy: 1, 1
+  size: 800, 754
+  orig: 800, 754
+  offset: 0, 0
+  index: -1

@@ -9,20 +9,14 @@ import ru.d.sintez.base.BaseScreen;
 import ru.d.sintez.math.Rect;
 import ru.d.sintez.sprite.*;
 
-public class MenuScreen extends BaseScreen {
+public class GameScreen extends BaseScreen {
 
-    private final Game game;
     private Background background;
+    private Ship ship;
     private Texture backgroundImg;
-    private TextureAtlas buttonsAtlas;
+    private TextureAtlas shipsAtlas;
     private TextureAtlas starAtlas;
-    private ButtonExit buttonExit;
-    private ButtonPlay buttonPlay;
     private Star[] stars;
-
-    public MenuScreen(Game game) {
-        this.game = game;
-    }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -31,15 +25,12 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        buttonExit.touchDown(touch, pointer, button);
-        buttonPlay.touchDown(touch, pointer, button);
+        ship.touchDown(touch, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        buttonExit.touchUp(touch, pointer, button);
-        buttonPlay.touchUp(touch, pointer, button);
         return super.touchUp(touch, pointer, button);
     }
 
@@ -49,9 +40,8 @@ public class MenuScreen extends BaseScreen {
         backgroundImg = new Texture("Galaxy.jpg");
         background = new Background(backgroundImg);
 
-        buttonsAtlas = new TextureAtlas(Gdx.files.internal("Atlas/Buttons.pack"));
-        buttonExit = new ButtonExit(buttonsAtlas);
-        buttonPlay = new ButtonPlay(buttonsAtlas, game);
+        shipsAtlas = new TextureAtlas(Gdx.files.internal("Atlas/Ships.pack"));
+        ship = new Ship(shipsAtlas, 3);
 
         starAtlas = new TextureAtlas(Gdx.files.internal("Atlas/Stars.pack"));
         stars = new Star[256];
@@ -62,17 +52,17 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public boolean touchDragged(Vector2 touch, int pointer) {
+        ship.touchDown(touch, pointer, -1);
         return false;
     }
 
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
-        buttonExit.resize(worldBounds);
-        buttonPlay.resize(worldBounds);
         for (int i = 0; i < stars.length; i++) {
             stars[i].resize(worldBounds);
         }
+        ship.resize(worldBounds);
     }
 
     @Override
@@ -85,11 +75,12 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void dispose() {
         backgroundImg.dispose();
-        backgroundImg.dispose();
+        shipsAtlas.dispose();
         super.dispose();
     }
 
     private void update(float delta) {
+        ship.update(delta);
         for (int i = 0; i < stars.length; i++) {
             stars[i].update(delta);
         }
@@ -101,8 +92,9 @@ public class MenuScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i].draw(batch);
         }
-        buttonExit.draw(batch);
-        buttonPlay.draw(batch);
+        ship.draw(batch);
         batch.end();
     }
+
+
 }

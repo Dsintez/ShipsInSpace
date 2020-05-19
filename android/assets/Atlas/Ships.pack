@@ -1,39 +1,32 @@
 
-Atlas.png
+Ships.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 EnemyAngel
   rotate: false
-  xy: 1, 503
+  xy: 1, 314
   size: 640, 480
   orig: 640, 480
   offset: 0, 0
   index: -1
-shot
-  rotate: false
-  xy: 1, 1
-  size: 600, 500
-  orig: 600, 500
-  offset: 0, 0
-  index: -1
 Ship
   rotate: false
-  xy: 643, 672
+  xy: 1, 1
   size: 322, 311
   orig: 322, 311
   offset: 0, 0
   index: 0
 Ship
   rotate: false
-  xy: 643, 359
+  xy: 643, 483
   size: 322, 311
   orig: 322, 311
   offset: 0, 0
   index: 1
 Ship
   rotate: false
-  xy: 603, 46
+  xy: 325, 1
   size: 322, 311
   orig: 322, 311
   offset: 0, 0
