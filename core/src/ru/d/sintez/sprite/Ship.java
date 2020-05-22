@@ -11,7 +11,7 @@ public class Ship extends Sprite {
 
     private final byte PROTRACTION = 20;
     private static final float SIZE = 0.1f;
-    private static final float MARGIN = 0.05f;
+    private static final float MARGIN = 0.04f;
     private static final int INVALID_POINTER = -1;
 
     private final Vector2 v0 = new Vector2(0.4f, 0f);
@@ -20,11 +20,10 @@ public class Ship extends Sprite {
     private int leftPointer;
     private int rightPointer;
 
-    private float length;
-    private Vector2 direction;
-    private Vector2 directionNor;
-    private Vector2 speedup;
-    private Vector2 touch;
+    private boolean pressedLeft;
+    private boolean pressedRight;
+
+    private Rect worldBounds;
     byte timer;
 
     public Ship(TextureAtlas atlas, int countPNG) {
@@ -33,11 +32,6 @@ public class Ship extends Sprite {
         for (int i = 0; i < regions.length; i++) {
             regions[i] = atlas.findRegion("Ship", i);
         }
-        direction = new Vector2();
-        directionNor = new Vector2();
-        touch = new Vector2();
-        speedup = new Vector2(0.005f, 0.005f);
-        length = 0.0f;
 
         leftPointer = INVALID_POINTER;
         rightPointer = INVALID_POINTER;
@@ -45,6 +39,7 @@ public class Ship extends Sprite {
 
     @Override
     public void resize(Rect worldBounds) {
+        this.worldBounds = worldBounds;
         setHeightProportion(SIZE);
         setBottom(worldBounds.getBottom() + MARGIN);
     }
@@ -60,24 +55,49 @@ public class Ship extends Sprite {
             }
             timer++;
         }
-        if (length != 0) {
-            if (length > 0) {
-                super.update(delta);
-                length -= directionNor.len();
-                direction.add(directionNor);
-                pos.add(directionNor);
-            } else {
-                length = 0;
-                pos.set(touch);
-            }
+        if (getLeft() < worldBounds.getLeft()) {
+            stop();
+            setLeft(worldBounds.getLeft());
+        } else if (getRight() > worldBounds.getRight()) {
+            stop();
+            setRight(worldBounds.getRight());
         }
     }
 
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        this.touch.set(touch);
-        direction = direction.set(touch).sub(pos);
-        length = direction.len();
-        directionNor = direction.cpy().nor().scl(speedup);
+        if (touch.x < worldBounds.pos.x) {
+            if (leftPointer != INVALID_POINTER) {
+                return false;
+            }
+            leftPointer = pointer;
+            moveLeft();
+        } else {
+            if (rightPointer != INVALID_POINTER) {
+                return false;
+            }
+            rightPointer = pointer;
+            moveRight();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer, int button) {
+        if (pointer == leftPointer) {
+            leftPointer = INVALID_POINTER;
+            if (rightPointer != INVALID_POINTER) {
+                moveRight();
+            } else {
+                stop();
+            }
+        } else if (pointer == rightPointer) {
+            rightPointer = INVALID_POINTER;
+            if (leftPointer != INVALID_POINTER) {
+                moveLeft();
+            } else {
+                stop();
+            }
+        }
         return false;
     }
 
@@ -85,10 +105,12 @@ public class Ship extends Sprite {
         switch (keycode) {
             case Input.Keys.A:
             case Input.Keys.LEFT:
+                pressedLeft = true;
                 moveLeft();
                 break;
             case Input.Keys.D:
             case Input.Keys.RIGHT:
+                pressedRight = true;
                 moveRight();
                 break;
         }
@@ -108,7 +130,26 @@ public class Ship extends Sprite {
     }
 
     public boolean keyUp(int keycode) {
-        stop();
+        switch (keycode) {
+            case Input.Keys.A:
+            case Input.Keys.LEFT:
+                pressedLeft = false;
+                if (pressedRight) {
+                    moveRight();
+                } else {
+                    stop();
+                }
+                break;
+            case Input.Keys.D:
+            case Input.Keys.RIGHT:
+                pressedRight = false;
+                if (pressedLeft) {
+                    moveLeft();
+                } else {
+                    stop();
+                }
+                break;
+        }
         return false;
     }
 }
