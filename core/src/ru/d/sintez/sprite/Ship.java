@@ -1,5 +1,6 @@
 package ru.d.sintez.sprite;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -9,6 +10,15 @@ import ru.d.sintez.math.Rect;
 public class Ship extends Sprite {
 
     private final byte PROTRACTION = 20;
+    private static final float SIZE = 0.1f;
+    private static final float MARGIN = 0.05f;
+    private static final int INVALID_POINTER = -1;
+
+    private final Vector2 v0 = new Vector2(0.4f, 0f);
+    private final Vector2 v = new Vector2();
+
+    private int leftPointer;
+    private int rightPointer;
 
     private float length;
     private Vector2 direction;
@@ -28,16 +38,20 @@ public class Ship extends Sprite {
         touch = new Vector2();
         speedup = new Vector2(0.005f, 0.005f);
         length = 0.0f;
+
+        leftPointer = INVALID_POINTER;
+        rightPointer = INVALID_POINTER;
     }
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.1f);
-        this.pos.set(worldBounds.pos);
+        setHeightProportion(SIZE);
+        setBottom(worldBounds.getBottom() + MARGIN);
     }
 
     @Override
     public void update(float delta) {
+        pos.mulAdd(v, delta);
         if (regions.length > 1) {
             if (timer % PROTRACTION == 0) {
                 if (frame == regions.length - 1) frame = 0;
@@ -46,20 +60,17 @@ public class Ship extends Sprite {
             }
             timer++;
         }
-        if (length >= 0) {
-            super.update(delta);
-            length -= directionNor.len();
-            direction.add(directionNor);
-            pos.add(directionNor);
-        } else {
-            pos.set(touch);
+        if (length != 0) {
+            if (length > 0) {
+                super.update(delta);
+                length -= directionNor.len();
+                direction.add(directionNor);
+                pos.add(directionNor);
+            } else {
+                length = 0;
+                pos.set(touch);
+            }
         }
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        System.out.printf("Ship touchDown screenX = %s, screenY = %s%n", screenX, screenY);
-        return super.touchDown(screenX, screenY, pointer, button);
     }
 
     public boolean touchDown(Vector2 touch, int pointer, int button) {
@@ -67,7 +78,37 @@ public class Ship extends Sprite {
         direction = direction.set(touch).sub(pos);
         length = direction.len();
         directionNor = direction.cpy().nor().scl(speedup);
-        System.out.printf("direction x = %s, y = %s%n", direction.x, direction.y);
+        return false;
+    }
+
+    public boolean keyDown(int keycode) {
+        switch (keycode) {
+            case Input.Keys.A:
+            case Input.Keys.LEFT:
+                moveLeft();
+                break;
+            case Input.Keys.D:
+            case Input.Keys.RIGHT:
+                moveRight();
+                break;
+        }
+        return false;
+    }
+
+    private void moveRight() {
+        v.set(v0);
+    }
+
+    private void moveLeft() {
+        v.set(v0).rotate(180);
+    }
+
+    private void stop() {
+        v.setZero();
+    }
+
+    public boolean keyUp(int keycode) {
+        stop();
         return false;
     }
 }

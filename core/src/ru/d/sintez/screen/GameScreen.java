@@ -2,6 +2,7 @@ package ru.d.sintez.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -19,11 +20,6 @@ public class GameScreen extends BaseScreen {
     private Star[] stars;
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return super.touchDown(screenX, screenY, pointer, button);
-    }
-
-    @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         ship.touchDown(touch, pointer, button);
         return false;
@@ -31,7 +27,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        return super.touchUp(touch, pointer, button);
+        return false;
     }
 
     @Override
@@ -44,25 +40,35 @@ public class GameScreen extends BaseScreen {
         ship = new Ship(shipsAtlas, 3);
 
         starAtlas = new TextureAtlas(Gdx.files.internal("Atlas/Stars.pack"));
-        stars = new Star[256];
+        stars = new Star[64];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(starAtlas);
         }
     }
 
+    public boolean keyDown(int keycode) {
+        ship.keyDown(keycode);
+        return false;
+    }
+
     @Override
     public boolean touchDragged(Vector2 touch, int pointer) {
-        ship.touchDown(touch, pointer, -1);
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        ship.keyUp(keycode);
         return false;
     }
 
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
-        for (int i = 0; i < stars.length; i++) {
-            stars[i].resize(worldBounds);
-        }
         ship.resize(worldBounds);
+        /*for (int i = 0; i < stars.length; i++) {
+            stars[i].resize(worldBounds);
+        }*/
     }
 
     @Override
@@ -76,6 +82,7 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         backgroundImg.dispose();
         shipsAtlas.dispose();
+        starAtlas.dispose();
         super.dispose();
     }
 
