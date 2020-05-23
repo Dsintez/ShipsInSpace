@@ -3,7 +3,7 @@ package ru.d.sintez.screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -21,9 +21,10 @@ public class GameScreen extends BaseScreen {
     private TextureAtlas starAtlas;
     private Star[] stars;
     private BulletPool bulletPool;
+    private Sound[] soundsMainShip;
+    private EnemyShip enemyShip;
 
     public GameScreen(Game game) {
-
         super(game);
     }
 
@@ -46,14 +47,17 @@ public class GameScreen extends BaseScreen {
         background = new Background(backgroundImg);
 
         bulletPool = new BulletPool();
+        soundsMainShip = new Sound[] {Gdx.audio.newSound(Gdx.files.internal("Sounds/shoot.mp3"))};
         shipsAtlas = new TextureAtlas(Gdx.files.internal("Atlas/Ships.pack"));
-        ship = new Ship(shipsAtlas, 3, bulletPool);
+        ship = new Ship(shipsAtlas, 3, bulletPool, soundsMainShip);
 
         starAtlas = new TextureAtlas(Gdx.files.internal("Atlas/Stars.pack"));
         stars = new Star[64];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(starAtlas);
         }
+
+        enemyShip = new EnemyShip(shipsAtlas, 1, bulletPool);
     }
 
     public boolean keyDown(int keycode) {
@@ -79,6 +83,7 @@ public class GameScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
         ship.resize(worldBounds);
+        enemyShip.resize(worldBounds);
         for (int i = 0; i < stars.length; i++) {
             stars[i].resize(worldBounds);
         }
@@ -98,12 +103,16 @@ public class GameScreen extends BaseScreen {
         backgroundImg.dispose();
         shipsAtlas.dispose();
         starAtlas.dispose();
+        for (Sound sound : soundsMainShip) {
+            sound.dispose();
+        }
         super.dispose();
     }
 
     private void update(float delta) {
         bulletPool.updateActiveSprites(delta);
         ship.update(delta);
+        enemyShip.update(delta);
         for (int i = 0; i < stars.length; i++) {
             stars[i].update(delta);
         }
@@ -121,8 +130,7 @@ public class GameScreen extends BaseScreen {
         }
         bulletPool.drawActiveSprites(batch);
         ship.draw(batch);
+        enemyShip.draw(batch);
         batch.end();
     }
-
-
 }
