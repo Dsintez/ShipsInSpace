@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import ru.d.sintez.base.Sprite;
 import ru.d.sintez.math.Rect;
+import ru.d.sintez.pool.BulletPool;
+import ru.d.sintez.utils.Regions;
 
 public class Ship extends Sprite {
 
@@ -14,8 +16,8 @@ public class Ship extends Sprite {
     private static final float MARGIN = 0.04f;
     private static final int INVALID_POINTER = -1;
 
-    private final Vector2 v0 = new Vector2(0.4f, 0f);
-    private final Vector2 v = new Vector2();
+    private final Vector2 v0;
+    private final Vector2 v;
 
     private int leftPointer;
     private int rightPointer;
@@ -26,13 +28,17 @@ public class Ship extends Sprite {
     private Rect worldBounds;
     byte timer;
 
-    public Ship(TextureAtlas atlas, int countPNG) {
-        super(new TextureRegion());
-        regions = new TextureRegion[countPNG];
-        for (int i = 0; i < regions.length; i++) {
-            regions[i] = atlas.findRegion("Ship", i);
-        }
+    private BulletPool bulletPool;
+    private TextureRegion[] bulletRegion;
+    private Vector2 bulletV;
 
+    public Ship(TextureAtlas atlas, int countPNG, BulletPool bulletPool) {
+        super(atlas.findRegion("mainShip"), 1, 3, countPNG);
+        this.bulletPool = bulletPool;
+        bulletRegion = Regions.split(atlas.findRegion("bullets"), 1, 2, 2);
+        bulletV = new Vector2(0, 0.5f);
+        v0  = new Vector2(0.4f, 0f);
+        v = new Vector2();
         leftPointer = INVALID_POINTER;
         rightPointer = INVALID_POINTER;
     }
@@ -113,20 +119,11 @@ public class Ship extends Sprite {
                 pressedRight = true;
                 moveRight();
                 break;
+            case Input.Keys.SPACE:
+                shoot();
+                break;
         }
         return false;
-    }
-
-    private void moveRight() {
-        v.set(v0);
-    }
-
-    private void moveLeft() {
-        v.set(v0).rotate(180);
-    }
-
-    private void stop() {
-        v.setZero();
     }
 
     public boolean keyUp(int keycode) {
@@ -151,5 +148,24 @@ public class Ship extends Sprite {
                 break;
         }
         return false;
+    }
+
+    private void moveRight() {
+        v.set(v0);
+    }
+
+    private void moveLeft() {
+        v.set(v0).rotate(180);
+    }
+
+    private void stop() {
+        v.setZero();
+    }
+
+    private void shoot() {
+        Bullet bullet1 = bulletPool.obtain();
+        bullet1.set(this, bulletRegion[0], pos.cpy().add(0.03f, 0f), bulletV, 0.03f, worldBounds, 1);
+        Bullet bullet2 = bulletPool.obtain();
+        bullet2.set(this, bulletRegion[0], pos.cpy().sub(0.03f, 0f), bulletV, 0.03f, worldBounds, 1);
     }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import ru.d.sintez.math.Rect;
+import ru.d.sintez.utils.Regions;
 
 public class Sprite extends Rect {
 
@@ -14,6 +15,10 @@ public class Sprite extends Rect {
     protected boolean destroyed;
 
     public Sprite() {
+    }
+
+    public Sprite(TextureRegion region, int rows, int cols, int frames) {
+        regions = Regions.split(region, rows, cols,frames);
     }
 
     public Sprite(TextureRegion region) {

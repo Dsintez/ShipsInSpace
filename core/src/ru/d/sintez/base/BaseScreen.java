@@ -1,5 +1,6 @@
 package ru.d.sintez.base;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -13,6 +14,7 @@ import ru.d.sintez.math.Rect;
 
 public class BaseScreen implements Screen, InputProcessor {
 
+    protected final Game game;
     protected SpriteBatch batch;
 
     private Rect screenBounds;
@@ -23,6 +25,10 @@ public class BaseScreen implements Screen, InputProcessor {
     private Matrix3 screenToWorld;
 
     private Vector2 touch;
+
+    public BaseScreen(Game game) {
+        this.game = game;
+    }
 
     @Override
     public boolean keyDown(int keycode) {

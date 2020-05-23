@@ -1,6 +1,5 @@
 package ru.d.sintez.sprite;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import ru.d.sintez.base.Sprite;
@@ -15,6 +14,7 @@ public class Bullet extends Sprite {
 
     public Bullet() {
         regions = new TextureRegion[1];
+        v = new Vector2();
     }
 
     @Override

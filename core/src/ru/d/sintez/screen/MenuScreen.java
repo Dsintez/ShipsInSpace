@@ -11,7 +11,6 @@ import ru.d.sintez.sprite.*;
 
 public class MenuScreen extends BaseScreen {
 
-    private final Game game;
     private Background background;
     private Texture backgroundImg;
     private TextureAtlas buttonsAtlas;
@@ -21,7 +20,7 @@ public class MenuScreen extends BaseScreen {
     private Star[] stars;
 
     public MenuScreen(Game game) {
-        this.game = game;
+        super(game);
     }
 
     @Override
