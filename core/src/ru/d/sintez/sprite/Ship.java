@@ -173,7 +173,7 @@ public class Ship extends Sprite {
     }
 
     private void shoot() {
-        sounds[0].play(0.1f);
+        sounds[0].play(0.3f);
         Bullet bullet1 = bulletPool.obtain();
         bullet1.set(this, bulletRegion[0], pos.cpy().add(0.03f, 0f), bulletV, 0.03f, worldBounds, 1);
         Bullet bullet2 = bulletPool.obtain();

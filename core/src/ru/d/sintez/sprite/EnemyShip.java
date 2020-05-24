@@ -46,7 +46,6 @@ public class EnemyShip extends Sprite {
     @Override
     public void update(float delta) {
         pos.mulAdd(v0, delta);
-        System.out.printf("update EnemyShip pos %s%n", pos);
         if (timer % PROTRACTION == 0) {
             if (shoot) shoot();
             timer = 0;
