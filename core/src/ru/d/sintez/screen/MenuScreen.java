@@ -2,6 +2,7 @@ package ru.d.sintez.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -18,6 +19,7 @@ public class MenuScreen extends BaseScreen {
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
     private Star[] stars;
+    private Music backgroundMusic;
 
     public MenuScreen(Game game) {
         super(game);
@@ -52,6 +54,10 @@ public class MenuScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(starAtlas);
         }
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds/backgroundMusic2.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.play();
     }
 
     @Override
@@ -80,6 +86,7 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         backgroundImg.dispose();
         backgroundImg.dispose();
+        backgroundMusic.dispose();
         super.dispose();
     }
 
