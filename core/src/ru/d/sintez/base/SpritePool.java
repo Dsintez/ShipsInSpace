@@ -20,6 +20,7 @@ public abstract class SpritePool<T extends Sprite> {
             object = freeObjects.remove(freeObjects.size() - 1);
         }
         activeObjects.add(object);
+//        System.out.printf("%s - active/free - %s/%s%n",getClass().getName(), activeObjects.size(), freeObjects.size());
         return object;
     }
 

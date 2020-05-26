@@ -1,25 +1,21 @@
 package ru.d.sintez.sprite;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import ru.d.sintez.base.Sprite;
+import ru.d.sintez.base.Ship;
 import ru.d.sintez.math.Rect;
 import ru.d.sintez.pool.BulletPool;
+import ru.d.sintez.pool.ExplosionPool;
 import ru.d.sintez.utils.Regions;
 
-public class Ship extends Sprite {
+public class MainShip extends Ship {
 
-    private final byte PROTRACTION = 10;
     private static final float SIZE = 0.1f;
     private static final float MARGIN = 0.04f;
     private static final int INVALID_POINTER = -1;
-
-    private final Vector2 v0;
-    private final Vector2 v;
+    private static final int HP = 100;
 
     private int leftPointer;
     private int rightPointer;
@@ -27,24 +23,17 @@ public class Ship extends Sprite {
     private boolean pressedLeft;
     private boolean pressedRight;
 
-    private boolean shoot;
-
-    private Rect worldBounds;
-    byte timer;
-
-    private BulletPool bulletPool;
-    private TextureRegion[] bulletRegion;
-    private Vector2 bulletV;
-
-    private final Sound[] sounds;
-
-    public Ship(TextureAtlas atlas, int countPNG, BulletPool bulletPool, Sound[] sounds) {
+    public MainShip(TextureAtlas atlas, int countPNG, BulletPool bulletPool, Sound[] sounds, ExplosionPool explosionPool) {
         super(atlas.findRegion("mainShip"), 1, 3, countPNG);
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         bulletRegion = Regions.split(atlas.findRegion("bullets"), 1, 2, 2);
         bulletV = new Vector2(0, 0.5f);
-        v0  = new Vector2(0.4f, 0f);
-        v = new Vector2();
+        bulletHeight = 0.03f;
+        bulletDamage = 1;
+        reloadInterval = 0.3f;
+        healthPoint = HP;
+        v0.set(0.4f, 0f);
         leftPointer = INVALID_POINTER;
         rightPointer = INVALID_POINTER;
         shoot = false;
@@ -53,21 +42,14 @@ public class Ship extends Sprite {
 
     @Override
     public void resize(Rect worldBounds) {
-        this.worldBounds = worldBounds;
+        super.resize(worldBounds);
         setHeightProportion(SIZE);
         setBottom(worldBounds.getBottom() + MARGIN);
     }
 
     @Override
     public void update(float delta) {
-        pos.mulAdd(v, delta);
-        if (timer % PROTRACTION == 0) {
-            if (shoot) shoot();
-            timer = 0;
-        }
-        if (shoot) timer++;
-        else timer = 0;
-
+        super.update(delta);
         if (getLeft() < worldBounds.getLeft()) {
             stop();
             setLeft(worldBounds.getLeft());
@@ -172,7 +154,8 @@ public class Ship extends Sprite {
         v.setZero();
     }
 
-    private void shoot() {
+    @Override
+    protected void shoot() {
         sounds[0].play(0.3f);
         Bullet bullet1 = bulletPool.obtain();
         bullet1.set(this, bulletRegion[0], pos.cpy().add(0.03f, 0f), bulletV, 0.03f, worldBounds, 1);

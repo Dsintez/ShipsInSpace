@@ -1,0 +1,34 @@
+
+Ships.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bullets
+  rotate: false
+  xy: 2, 2
+  size: 200, 480
+  orig: 200, 480
+  offset: 0, 0
+  index: -1
+enemyAngel
+  rotate: false
+  xy: 2, 484
+  size: 916, 382
+  orig: 916, 382
+  offset: 0, 0
+  index: -1
+explosion
+  rotate: false
+  xy: 2, 868
+  size: 959, 1104
+  orig: 959, 1104
+  offset: 0, 0
+  index: -1
+mainShip
+  rotate: false
+  xy: 963, 1661
+  size: 966, 311
+  orig: 966, 311
+  offset: 0, 0
+  index: -1
