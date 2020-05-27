@@ -9,7 +9,7 @@ import ru.d.sintez.pool.ExplosionPool;
 import ru.d.sintez.sprite.Bullet;
 import ru.d.sintez.sprite.Explosion;
 
-public class Ship  extends Sprite {
+public class Ship extends Sprite {
 
     protected final Vector2 v0;
     protected final Vector2 v;
@@ -65,7 +65,7 @@ public class Ship  extends Sprite {
                 reloadTimer = 0;
             }
         }
-        if (shoot) reloadTimer+=delta;
+        if (shoot) reloadTimer += delta;
     }
 
     @Override
