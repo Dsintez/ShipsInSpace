@@ -50,6 +50,7 @@ public class MainShip extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
+        autoShoot(delta);
         if (getLeft() < worldBounds.getLeft()) {
             stop();
             setLeft(worldBounds.getLeft());
@@ -161,5 +162,12 @@ public class MainShip extends Ship {
         bullet1.set(this, bulletRegion[0], pos.cpy().add(0.03f, 0f), bulletV, 0.03f, worldBounds, 1);
         Bullet bullet2 = bulletPool.obtain();
         bullet2.set(this, bulletRegion[0], pos.cpy().sub(0.03f, 0f), bulletV, 0.03f, worldBounds, 1);
+    }
+
+    public boolean isBulletCollision(Bullet bullet) {
+        return !(bullet.getRight() < getLeft() ||
+                bullet.getLeft() > getRight() ||
+                bullet.getBottom() > getTop() ||
+                bullet.getTop() < getBottom());
     }
 }

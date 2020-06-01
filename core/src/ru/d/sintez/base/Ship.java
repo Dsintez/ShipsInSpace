@@ -9,8 +9,9 @@ import ru.d.sintez.pool.ExplosionPool;
 import ru.d.sintez.sprite.Bullet;
 import ru.d.sintez.sprite.Explosion;
 
-public class Ship  extends Sprite {
+public class Ship extends Sprite {
 
+    private static final float DAMAGE_ANIMATE_INTERVAL = 0.1f;
     protected final Vector2 v0;
     protected final Vector2 v;
     protected Rect worldBounds;
@@ -19,9 +20,11 @@ public class Ship  extends Sprite {
     protected BulletPool bulletPool;
     protected TextureRegion[] bulletRegion;
     protected Vector2 bulletV;
+    protected Vector2 bulletPos;
 
     protected boolean shoot;
     protected float reloadTimer;
+    protected float damageAnimateTimer;
     protected Sound[] sounds;
     protected float bulletHeight;
     protected int bulletDamage;
@@ -32,6 +35,9 @@ public class Ship  extends Sprite {
         super(region, rows, cols, frames);
         v0 = new Vector2();
         v = new Vector2();
+        bulletV = new Vector2();
+        bulletPos = new Vector2();
+        damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
     }
 
     public Ship(BulletPool bulletPool, Rect worldBounds, Sound[] sounds, ExplosionPool explosionPool) {
@@ -42,6 +48,7 @@ public class Ship  extends Sprite {
         v0 = new Vector2();
         v = new Vector2();
         bulletV = new Vector2();
+        damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
     }
 
     @Override
@@ -58,14 +65,32 @@ public class Ship  extends Sprite {
 
     @Override
     public void update(float delta) {
+        super.update(delta);
         pos.mulAdd(v, delta);
+        damageAnimateTimer += delta;
+        if (damageAnimateTimer >= DAMAGE_ANIMATE_INTERVAL) {
+            frame = 0;
+        }
+    }
+
+    public void damage(int damage) {
+        damageAnimateTimer = 0f;
+        frame = 1;
+        healthPoint -= damage;
+        if (healthPoint <= 0) {
+            healthPoint = 0;
+            destroy();
+        }
+    }
+
+    protected void autoShoot(float delta) {
         if (reloadTimer > reloadInterval) {
-            if (shoot && !isOutside(worldBounds)) {
+            if (shoot) {
                 shoot();
                 reloadTimer = 0;
             }
         }
-        if (shoot) reloadTimer+=delta;
+        if (shoot) reloadTimer += delta;
     }
 
     @Override
@@ -77,5 +102,9 @@ public class Ship  extends Sprite {
     private void boom() {
         Explosion explosion = explosionPool.obtain();
         explosion.set(getHeight(), pos);
+    }
+
+    public int getBulletDamage() {
+        return bulletDamage;
     }
 }

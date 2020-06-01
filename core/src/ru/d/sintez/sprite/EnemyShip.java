@@ -10,6 +10,7 @@ import ru.d.sintez.pool.ExplosionPool;
 
 public class EnemyShip extends Ship {
 
+    public static final float Y = -0.3f;
     private static final float SIZE = 0.1f;
 
     private TextureRegion bulletRegion;
@@ -29,9 +30,10 @@ public class EnemyShip extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
-//        if (getTop() < worldBounds.getTop()) {
-//            v.set(v0);
-//        }
+        if (getTop() < worldBounds.getTop()) {
+            autoShoot(delta);
+            v.set(v0);
+        }
         if (getBottom() <= worldBounds.getBottom()) {
             destroy();
         }
@@ -58,15 +60,22 @@ public class EnemyShip extends Ship {
         this.reloadTimer = reloadInterval;
         this.healthPoint = healthPoint;
         setHeightProportion(height);
-        this.v.set(0f, -0.1f);
+        this.v.set(0f, Y);
     }
 
     @Override
     protected void shoot() {
-        sounds[0].play(0.01f);
+        sounds[0].play(0.1f);
         Bullet bullet1 = bulletPool.obtain();
-        bullet1.set(this, bulletRegion, pos.cpy().add(bulletHeight*1.5f,0), bulletV, bulletHeight, worldBounds, bulletDamage);
+        bullet1.set(this, bulletRegion, pos.cpy().add(bulletHeight*1.5f,-getHalfHeight()), bulletV, bulletHeight, worldBounds, bulletDamage);
         Bullet bullet2 = bulletPool.obtain();
-        bullet2.set(this, bulletRegion, pos.cpy().sub(bulletHeight*1.5f,0), bulletV, bulletHeight, worldBounds, bulletDamage);
+        bullet2.set(this, bulletRegion, pos.cpy().sub(bulletHeight*1.5f,getHalfHeight()), bulletV, bulletHeight, worldBounds, bulletDamage);
+    }
+
+    public boolean isBulletCollision(Bullet bullet) {
+        return !(bullet.getRight() < getLeft() ||
+                bullet.getLeft() > getRight() ||
+                bullet.getBottom() > getTop() ||
+                bullet.getTop() < pos.y);
     }
 }
