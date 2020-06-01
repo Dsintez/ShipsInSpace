@@ -1,54 +1,54 @@
 
 Ships.png
-size: 1024,4096
+size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bullets
   rotate: false
-  xy: 740, 1709
+  xy: 740, 321
   size: 200, 480
   orig: 200, 480
   offset: 0, 0
   index: -1
 enemyAngel
   rotate: false
-  xy: 2, 1006
+  xy: 963, 1525
   size: 916, 382
   orig: 916, 382
   offset: 0, 0
   index: -1
 explosion
   rotate: false
-  xy: 2, 2191
+  xy: 2, 803
   size: 959, 1104
   orig: 959, 1104
   offset: 0, 0
   index: -1
 gameOver
   rotate: false
-  xy: 2, 142
+  xy: 1498, 661
   size: 413, 549
   orig: 413, 549
   offset: 0, 0
   index: -1
 mainShip
   rotate: false
-  xy: 2, 693
+  xy: 963, 1212
   size: 966, 311
   orig: 966, 311
   offset: 0, 0
   index: -1
 newGame
   rotate: false
-  xy: 2, 2
-  size: 759, 138
-  orig: 759, 138
+  xy: 963, 677
+  size: 533, 533
+  orig: 533, 533
   offset: 0, 0
   index: -1
 stars
   rotate: false
-  xy: 2, 1390
+  xy: 2, 2
   size: 736, 799
   orig: 736, 799
   offset: 0, 0

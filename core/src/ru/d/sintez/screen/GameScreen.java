@@ -24,7 +24,7 @@ public class GameScreen extends BaseScreen {
     private Background background;
     private MainShip mainShip;
     private Texture backgroundImg;
-    private TextureAtlas shipsAtlas;
+    private TextureAtlas atlas;
     private TextureAtlas starAtlas;
     private Star[] stars;
     private BulletPool bulletPool;
@@ -34,6 +34,7 @@ public class GameScreen extends BaseScreen {
     private EnemyEmitter enemyEmitter;
     private State state;
     private GameOver gameOver;
+    private NewGame newGame;
 
     public GameScreen(Game game) {
         super(game);
@@ -43,6 +44,8 @@ public class GameScreen extends BaseScreen {
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if (state == State.PLAYING) {
             mainShip.touchDown(touch, pointer, button);
+        } else if (state == State.GAME_OVER) {
+            newGame.touchDown(touch, pointer, button);
         }
         return false;
     }
@@ -51,6 +54,8 @@ public class GameScreen extends BaseScreen {
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         if (state == State.PLAYING) {
             mainShip.touchUp(touch, pointer, button);
+        } else if (state == State.GAME_OVER) {
+            newGame.touchUp(touch, pointer, button);
         }
         return false;
     }
@@ -63,11 +68,11 @@ public class GameScreen extends BaseScreen {
 
         bulletPool = new BulletPool();
         soundsShip = new Sound[]{Gdx.audio.newSound(Gdx.files.internal("Sounds/shoot.mp3"))};
-        shipsAtlas = new TextureAtlas(Gdx.files.internal("Atlas/Ships.atlas"));
-        explosionPool = new ExplosionPool(shipsAtlas);
-        mainShip = new MainShip(shipsAtlas, 3, bulletPool, soundsShip, explosionPool);
+        atlas = new TextureAtlas(Gdx.files.internal("Atlas/Ships.atlas"));
+        explosionPool = new ExplosionPool(atlas);
+        mainShip = new MainShip(atlas, 3, bulletPool, soundsShip, explosionPool);
         enemyPool = new EnemyPool(bulletPool, worldBounds, soundsShip, explosionPool);
-        enemyEmitter = new EnemyEmitter(shipsAtlas, enemyPool);
+        enemyEmitter = new EnemyEmitter(atlas, enemyPool);
 
         starAtlas = new TextureAtlas(Gdx.files.internal("Atlas/Stars.pack"));
         stars = new Star[64];
@@ -75,7 +80,8 @@ public class GameScreen extends BaseScreen {
             stars[i] = new Star(starAtlas);
         }
         state = State.PLAYING;
-        gameOver = new GameOver(shipsAtlas);
+        gameOver = new GameOver(atlas);
+        newGame = new NewGame(atlas, game);
     }
 
     public boolean keyDown(int keycode) {
@@ -107,6 +113,7 @@ public class GameScreen extends BaseScreen {
         background.resize(worldBounds);
         mainShip.resize(worldBounds);
         gameOver.resize(worldBounds);
+        newGame.resize(worldBounds);
         for (int i = 0; i < stars.length; i++) {
             stars[i].resize(worldBounds);
         }
@@ -125,7 +132,7 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         bulletPool.dispose();
         backgroundImg.dispose();
-        shipsAtlas.dispose();
+        atlas.dispose();
         starAtlas.dispose();
         enemyPool.dispose();
         explosionPool.dispose();
@@ -203,6 +210,7 @@ public class GameScreen extends BaseScreen {
             enemyPool.drawActiveSprites(batch);
         } else if (state == State.GAME_OVER) {
             gameOver.draw(batch);
+            newGame.draw(batch);
         }
         explosionPool.drawActiveSprites(batch);
         batch.end();
