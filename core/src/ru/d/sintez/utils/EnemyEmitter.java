@@ -17,17 +17,17 @@ public class EnemyEmitter {
     private static final float ENEMY_SMALL_BULLET_HEIGHT = 0.02f;
     private static final float ENEMY_SMALL_VY = -0.3f;
     private static final int ENEMY_SMALL_DAMAGE = 1;
-    private static final float ENEMY_SMALL_RELOAD_INTERVAL = 0.4f;
+    private static final float ENEMY_SMALL_RELOAD_INTERVAL = 1f;
 
     private static  final float ENEMY_MEDIUM_HEIGHT = 0.15f;
-    private static final int ENEMY_MEDIUM_HP = 5;
+    private static final int ENEMY_MEDIUM_HP = 3;
     private static final float ENEMY_MEDIUM_BULLET_HEIGHT = 0.042f;
     private static final float ENEMY_MEDIUM_VY = -0.25f;
     private static final int ENEMY_MEDIUM_DAMAGE = 5;
     private static final float ENEMY_MEDIUM_RELOAD_INTERVAL = 4f;
 
     private static  final float ENEMY_BIG_HEIGHT = 0.2f;
-    private static final int ENEMY_BIG_HP = 10;
+    private static final int ENEMY_BIG_HP = 5;
     private static final float ENEMY_BIG_BULLET_HEIGHT = 0.06f;
     private static final float ENEMY_BIG_VY = -0.3f;
     private static final int ENEMY_BIG_DAMAGE = 10;
@@ -46,6 +46,8 @@ public class EnemyEmitter {
     private final TextureRegion bulletRegion;
     private final EnemyPool enemyPool;
 
+    private int level;
+
     public EnemyEmitter(TextureAtlas atlas, EnemyPool enemyPool) {
         TextureRegion enemy0 = atlas.findRegion("enemyAngel");
         this.enemySmallRegions = Regions.split(enemy0, 1, 2, 2);
@@ -58,14 +60,16 @@ public class EnemyEmitter {
         this.enemyBigV = new Vector2(0, -0.005f);
         this.bulletRegion = Regions.split(atlas.findRegion("bullets"), 1, 2, 2)[1];
         this.enemyPool = enemyPool;
+        this.level = 1;
     }
 
     public void resize(Rect worldBounds){
         this.worldBounds = worldBounds;
     }
 
-    public void generate(float delta) {
-        generateTimer += delta;
+    public void generate(float delta, int frags) {
+        level = frags / 10 + 1;
+        generateTimer += delta * level;
         if (generateTimer >= GENERATE_INTERVAL) {
             generateTimer = 0f;
             EnemyShip enemyShip = enemyPool.obtain();
@@ -110,5 +114,9 @@ public class EnemyEmitter {
             enemyShip.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemyShip.getHalfWidth(), worldBounds.getRight() - enemyShip.getHalfWidth());
             enemyShip.setBottom(worldBounds.getTop());
         }
+    }
+
+    public int getLevel() {
+        return level;
     }
 }

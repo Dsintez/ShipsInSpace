@@ -9,7 +9,7 @@ import ru.d.sintez.screen.GameScreen;
 
 public class ButtonPlay extends ScaleButton {
 
-    private final float MARGIN = 0.05f;
+    private final float MARGIN = 0.01f;
     private final Game game;
 
     public ButtonPlay(TextureAtlas region, Game game) {
@@ -19,7 +19,7 @@ public class ButtonPlay extends ScaleButton {
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.1f);
+        setHeightProportion(0.09f);
         setBottom(worldBounds.getBottom() + MARGIN);
         setLeft(worldBounds.getLeft() + MARGIN);
     }

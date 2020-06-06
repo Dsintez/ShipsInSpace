@@ -1,5 +1,6 @@
 package ru.d.sintez.sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -15,11 +16,10 @@ public class MainShip extends Ship {
     private static final float SIZE = 0.1f;
     private static final float MARGIN = 0.04f;
     private static final int INVALID_POINTER = -1;
-    private static final int HP = 1;
+    private static final int HP = 100;
 
     private int leftPointer;
     private int rightPointer;
-
     private boolean pressedLeft;
     private boolean pressedRight;
 
@@ -32,12 +32,9 @@ public class MainShip extends Ship {
         bulletHeight = 0.03f;
         bulletDamage = 1;
         reloadInterval = 0.3f;
-        healthPoint = HP;
         v0.set(0.4f, 0f);
-        leftPointer = INVALID_POINTER;
-        rightPointer = INVALID_POINTER;
-        shoot = false;
         this.sounds = sounds;
+        startNewGame();
     }
 
     @Override
@@ -143,18 +140,6 @@ public class MainShip extends Ship {
         return false;
     }
 
-    private void moveRight() {
-        v.set(v0);
-    }
-
-    private void moveLeft() {
-        v.set(v0).rotate(180);
-    }
-
-    private void stop() {
-        v.setZero();
-    }
-
     @Override
     protected void shoot() {
         sounds[0].play(0.3f);
@@ -169,5 +154,28 @@ public class MainShip extends Ship {
                 bullet.getLeft() > getRight() ||
                 bullet.getBottom() > getTop() ||
                 bullet.getTop() < getBottom());
+    }
+
+    public void startNewGame() {
+        healthPoint = HP;
+        leftPointer = INVALID_POINTER;
+        rightPointer = INVALID_POINTER;
+        stop();
+        pos.x = 0;
+        flushDestroy();
+        if (Gdx.input.isPeripheralAvailable(Input.Peripheral.MultitouchScreen)) shoot = true;
+        else shoot = false;
+    }
+
+    private void moveRight() {
+        v.set(v0);
+    }
+
+    private void moveLeft() {
+        v.set(v0).rotate(180);
+    }
+
+    private void stop() {
+        v.setZero();
     }
 }

@@ -8,7 +8,7 @@ import ru.d.sintez.base.ScaleButton;
 import ru.d.sintez.math.Rect;
 
 public class ButtonExit extends ScaleButton {
-    private final float MARGIN = 0.05f;
+    private final float MARGIN = 0.01f;
 
     public ButtonExit(TextureAtlas region) {
         super(new TextureRegion(region.findRegion("Exit")));
@@ -16,7 +16,7 @@ public class ButtonExit extends ScaleButton {
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.1f);
+        setHeightProportion(0.09f);
         setBottom(worldBounds.getBottom() + MARGIN);
         setRight(worldBounds.getRight() - MARGIN);
     }

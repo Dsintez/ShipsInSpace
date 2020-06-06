@@ -8,11 +8,11 @@ import ru.d.sintez.screen.GameScreen;
 
 public class NewGame extends ScaleButton {
 
-    private final Game game;
+    private final GameScreen gameScreen;
 
-    public NewGame(TextureAtlas atlas, Game game) {
+    public NewGame(TextureAtlas atlas, GameScreen gameScreen) {
         super(atlas.findRegion("newGame"));
-        this.game = game;
+        this.gameScreen = gameScreen;
     }
 
     @Override
@@ -23,6 +23,6 @@ public class NewGame extends ScaleButton {
 
     @Override
     public void action() {
-        game.setScreen(new GameScreen(game));
+        gameScreen.startNewGame();
     }
 }

@@ -8,40 +8,46 @@ import ru.d.sintez.math.Rnd;
 
 public class Star extends Sprite {
 
+    private static final float ANIMATE_INTERVAL = 4f;
     private Vector2 v;
     private Rect worldBounds;
 
     private float animateTimer;
-    private float animate_Interval = 2f;
+    private boolean animate;
 
     public Star(TextureAtlas atlas) {
-        super(atlas.findRegion("star"));
+        super(atlas.findRegion("stars"), 6, 5, 28);
         v = new Vector2();
         float vx = Rnd.nextFloat(-0.005f, 0.005f);
         float vy = Rnd.nextFloat(-0.1f, -0.05f);
         v.set(vx, vy);
         worldBounds = new Rect();
+        frame = 27;
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-        setHeightProportion(0.02f);
+        setHeightProportion(0.012f);
         float PosX = Rnd.nextFloat(worldBounds.getLeft(), worldBounds.getRight());
         float PosY = Rnd.nextFloat(worldBounds.getBottom(), worldBounds.getTop());
         pos.set(PosX, PosY);
         this.worldBounds = worldBounds;
-        animateTimer = Rnd.nextFloat(0f, 2f);
+        animateTimer = Rnd.nextFloat(0f, ANIMATE_INTERVAL);
     }
 
     public void update(float delta) {
         animateTimer += delta;
-        if (animateTimer > 1.5f) {
-            setScale(getScale() + delta * 1.5f);
+        if (animateTimer > ANIMATE_INTERVAL/2 && animate) {
+            if (++frame == regions.length) {
+                frame = 0;
+                animate = false;
+            }
         }
-        if (animateTimer > animate_Interval) {
-            setScale(1f);
+        if (animateTimer > ANIMATE_INTERVAL) {
             animateTimer = 0f;
+            frame = 0;
+            animate = true;
         }
         pos.mulAdd(v, delta);
         checkBounds();

@@ -7,7 +7,7 @@ import ru.d.sintez.base.Sprite;
 
 public class Explosion extends Sprite {
 
-    private static final float ANIMATE_INTERVAL = 0.017f;
+    private static final float ANIMATE_INTERVAL = 0.0017f;
 
     private float animateTimer;
     private Sound sound;
@@ -21,6 +21,7 @@ public class Explosion extends Sprite {
         setHeightProportion(height);
         this.pos.set(pos);
         sound.play();
+        frame = 0;
     }
 
     @Override
@@ -38,5 +39,6 @@ public class Explosion extends Sprite {
     public void destroy() {
         super.destroy();
         frame = 0;
+        animateTimer = 0f;
     }
 }
