@@ -1,0 +1,75 @@
+
+AtlasWithShips.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bigShip
+  rotate: false
+  xy: 963, 944
+  size: 916, 382
+  orig: 916, 382
+  offset: 0, 0
+  index: -1
+bullets
+  rotate: false
+  xy: 1642, 149
+  size: 200, 480
+  orig: 200, 480
+  offset: 0, 0
+  index: -1
+explosion
+  rotate: false
+  xy: 2, 803
+  size: 959, 1104
+  orig: 959, 1104
+  offset: 0, 0
+  index: -1
+mainShip
+  rotate: false
+  xy: 963, 631
+  size: 966, 311
+  orig: 966, 311
+  offset: 0, 0
+  index: -1
+mediumShip
+  rotate: false
+  xy: 963, 1328
+  size: 900, 579
+  orig: 900, 579
+  offset: 0, 0
+  index: -1
+smallShip
+  rotate: false
+  xy: 740, 256
+  size: 900, 373
+  orig: 900, 373
+  offset: 0, 0
+  index: -1
+stars
+  rotate: false
+  xy: 2, 2
+  size: 736, 799
+  orig: 736, 799
+  offset: 0, 0
+  index: -1
+
+AtlasWithShips2.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+gameOver
+  rotate: false
+  xy: 537, 2
+  size: 413, 549
+  orig: 413, 549
+  offset: 0, 0
+  index: -1
+newGame
+  rotate: false
+  xy: 2, 18
+  size: 533, 533
+  orig: 533, 533
+  offset: 0, 0
+  index: -1
