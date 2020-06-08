@@ -60,7 +60,7 @@ public class GameScreen extends BaseScreen {
 
         bulletPool = new BulletPool();
         soundsShip = new Sound[]{Gdx.audio.newSound(Gdx.files.internal("Sounds/shoot.mp3"))};
-        atlas = new TextureAtlas(Gdx.files.internal("Atlas/Ships.atlas"));
+        atlas = new TextureAtlas(Gdx.files.internal("Atlas/AtlasWithShips.atlas"));
         explosionPool = new ExplosionPool(atlas);
         mainShip = new MainShip(atlas, 3, bulletPool, soundsShip, explosionPool);
         enemyPool = new EnemyPool(bulletPool, worldBounds, soundsShip, explosionPool);

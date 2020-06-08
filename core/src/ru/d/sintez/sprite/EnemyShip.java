@@ -46,6 +46,7 @@ public class EnemyShip extends Ship {
             float bulletHeight,
             float bulletVY,
             int bulletDamage,
+            int holder,
             float reloadInterval,
             int healthPoint,
             float height
@@ -56,6 +57,7 @@ public class EnemyShip extends Ship {
         this.bulletHeight = bulletHeight;
         this.bulletV.set(0, bulletVY);
         this.bulletDamage = bulletDamage;
+        this.holder = holder;
         this.reloadInterval = reloadInterval;
         this.reloadTimer = reloadInterval;
         this.healthPoint = healthPoint;
@@ -66,6 +68,10 @@ public class EnemyShip extends Ship {
     @Override
     protected void shoot() {
         sounds[0].play(0.1f);
+//        for (int i = 1; i == holder; i++) {
+//            Bullet bullet = bulletPool.obtain();
+//            bullet.set(this, bulletRegion, pos.cpy().add(0,-getHalfHeight()), bulletV, bulletHeight, worldBounds, bulletDamage);
+//        }
         Bullet bullet1 = bulletPool.obtain();
         bullet1.set(this, bulletRegion, pos.cpy().add(bulletHeight*1.5f,-getHalfHeight()), bulletV, bulletHeight, worldBounds, bulletDamage);
         Bullet bullet2 = bulletPool.obtain();

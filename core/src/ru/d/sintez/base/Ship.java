@@ -28,6 +28,7 @@ public class Ship extends Sprite {
     protected Sound[] sounds;
     protected float bulletHeight;
     protected int bulletDamage;
+    protected int holder;
     protected int healthPoint;
     protected float reloadInterval;
 
@@ -38,6 +39,7 @@ public class Ship extends Sprite {
         bulletV = new Vector2();
         bulletPos = new Vector2();
         damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
+        holder = 1;
     }
 
     public Ship(BulletPool bulletPool, Rect worldBounds, Sound[] sounds, ExplosionPool explosionPool) {
@@ -49,6 +51,7 @@ public class Ship extends Sprite {
         v = new Vector2();
         bulletV = new Vector2();
         damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
+        holder = 1;
     }
 
     @Override

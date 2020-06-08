@@ -17,6 +17,7 @@ public class EnemyEmitter {
     private static final float ENEMY_SMALL_BULLET_HEIGHT = 0.02f;
     private static final float ENEMY_SMALL_VY = -0.3f;
     private static final int ENEMY_SMALL_DAMAGE = 1;
+    private static final int ENEMY_SMALL_HOLDER = 1;
     private static final float ENEMY_SMALL_RELOAD_INTERVAL = 1f;
 
     private static  final float ENEMY_MEDIUM_HEIGHT = 0.15f;
@@ -24,6 +25,7 @@ public class EnemyEmitter {
     private static final float ENEMY_MEDIUM_BULLET_HEIGHT = 0.042f;
     private static final float ENEMY_MEDIUM_VY = -0.25f;
     private static final int ENEMY_MEDIUM_DAMAGE = 5;
+    private static final int ENEMY_MEDIUM_HOLDER = 1;
     private static final float ENEMY_MEDIUM_RELOAD_INTERVAL = 4f;
 
     private static  final float ENEMY_BIG_HEIGHT = 0.2f;
@@ -31,6 +33,7 @@ public class EnemyEmitter {
     private static final float ENEMY_BIG_BULLET_HEIGHT = 0.06f;
     private static final float ENEMY_BIG_VY = -0.3f;
     private static final int ENEMY_BIG_DAMAGE = 10;
+    private static final int ENEMY_BIG_HOLDER = 2;
     private static final float ENEMY_BIG_RELOAD_INTERVAL = 1f;
 
     private Rect worldBounds;
@@ -49,11 +52,11 @@ public class EnemyEmitter {
     private int level;
 
     public EnemyEmitter(TextureAtlas atlas, EnemyPool enemyPool) {
-        TextureRegion enemy0 = atlas.findRegion("enemyAngel");
+        TextureRegion enemy0 = atlas.findRegion("smallShip");
         this.enemySmallRegions = Regions.split(enemy0, 1, 2, 2);
-        TextureRegion enemy1 = atlas.findRegion("enemyAngel");
+        TextureRegion enemy1 = atlas.findRegion("mediumShip");
         this.enemyMediumRegions = Regions.split(enemy1, 1, 2, 2);
-        TextureRegion enemy2 = atlas.findRegion("enemyAngel");
+        TextureRegion enemy2 = atlas.findRegion("bigShip");
         this.enemyBigRegions = Regions.split(enemy2, 1, 2, 2);
         this.enemySmallV = new Vector2(0, -0.075f);
         this.enemyMediumV = new Vector2(0, -0.03f);
@@ -82,6 +85,7 @@ public class EnemyEmitter {
                         ENEMY_SMALL_BULLET_HEIGHT,
                         ENEMY_SMALL_VY,
                         ENEMY_SMALL_DAMAGE,
+                        ENEMY_SMALL_HOLDER,
                         ENEMY_SMALL_RELOAD_INTERVAL,
                         ENEMY_SMALL_HP,
                         ENEMY_SMALL_HEIGHT
@@ -94,6 +98,7 @@ public class EnemyEmitter {
                         ENEMY_MEDIUM_BULLET_HEIGHT,
                         ENEMY_MEDIUM_VY,
                         ENEMY_MEDIUM_DAMAGE,
+                        ENEMY_MEDIUM_HOLDER,
                         ENEMY_MEDIUM_RELOAD_INTERVAL,
                         ENEMY_MEDIUM_HP,
                         ENEMY_MEDIUM_HEIGHT
@@ -106,6 +111,7 @@ public class EnemyEmitter {
                         ENEMY_BIG_BULLET_HEIGHT,
                         ENEMY_BIG_VY,
                         ENEMY_BIG_DAMAGE,
+                        ENEMY_BIG_HOLDER,
                         ENEMY_BIG_RELOAD_INTERVAL,
                         ENEMY_BIG_HP,
                         ENEMY_BIG_HEIGHT

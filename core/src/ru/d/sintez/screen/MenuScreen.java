@@ -49,7 +49,7 @@ public class MenuScreen extends BaseScreen {
         buttonExit = new ButtonExit(buttonsAtlas);
         buttonPlay = new ButtonPlay(buttonsAtlas, game);
 
-        starAtlas = new TextureAtlas(Gdx.files.internal("Atlas/Ships.atlas"));
+        starAtlas = new TextureAtlas(Gdx.files.internal("Atlas/AtlasWithShips.atlas"));
         stars = new Star[256];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(starAtlas);
